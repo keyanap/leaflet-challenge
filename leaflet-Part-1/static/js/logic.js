@@ -17,7 +17,7 @@ d3.json(geoData).then(function(data) {
     // Console log data
     console.log('Data: ', data);
     // Style feature
-    style: function(feature) {
+    function mapStyle(feature) {
         return {
             opacity: 1,
             fillOpacity: 1,
@@ -28,7 +28,6 @@ d3.json(geoData).then(function(data) {
             weight: 0.5
         };
     }
-
     // Create function to determine colors for earthquake by depth
     function chooseColor(depth) {
         if (depth > 90) return "orangered";
@@ -38,7 +37,6 @@ d3.json(geoData).then(function(data) {
         else if (depth > 10) return "green";
         else return "lightgreen";
     }
-
     // Create function to determine size for earthquake by mag size
     function chooseRadius(mag) {
         if (mag === 0) {
@@ -46,16 +44,16 @@ d3.json(geoData).then(function(data) {
         }
         return mag * 4;
     }
-    
     // Create a geoJSON layer with retrived data
     L.geoJson(data, {
         // Add earthquakes
         pointToLayer: function(feature, latlng) {
             return L.circleMarker(latlng);
         },
-        style: style,
+        style: mapStyle,
         // popup  data on each feature
         onEachFeature: function(feature, layer) {
             layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place + "<br>Depth: " + feature.geometry.coordinates[2]);
         }
+    })
     }).addTo(myMap);
